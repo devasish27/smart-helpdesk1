@@ -53,6 +53,10 @@ app.get(
   }
 );
 
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
+
 app.use('/api/kb', kbRoutes);
 
 
