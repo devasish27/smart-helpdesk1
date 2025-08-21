@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === Global resets === */
+body {
+  @apply bg-slate-50 text-slate-800 font-sans;
+}
+a {
+  @apply text-brand-600 hover:underline;
+}
+h1, h2, h3, h4 {
+  @apply font-semibold text-slate-800;
+}
+
+/* === Layout helpers === */
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
+.card {
+  @apply bg-white rounded-2xl shadow-md border border-slate-200;
+}
+.card-hover {
+  @apply transition transform hover:shadow-lg hover:-translate-y-1;
+}
+
+/* === Buttons === */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition focus:outline-none;
+}
+.btn-primary {
+  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+}
+.btn-secondary {
+  @apply btn bg-slate-200 text-slate-700 hover:bg-slate-300;
+}
+.btn-danger {
+  @apply btn bg-red-500 text-white hover:bg-red-600;
+}
+
+/* === Inputs === */
+.input {
+  @apply w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none;
+}
+.label {
+  @apply block mb-1 text-sm font-medium text-slate-700;
+}
+
+/* === Navbar === */
+.navbar {
+  @apply bg-slate-800 text-white px-6 py-3 flex items-center justify-between;
+}
+.navbar a {
+  @apply hover:text-brand-300;
+}
+
+/* === Brand Colors === */
+:root {
+  --brand-600: #2563eb; /* Blue */
+  --brand-700: #1d4ed8;
+  --brand-300: #60a5fa;
+}
+.text-brand-600 { color: var(--brand-600); }
+.bg-brand-600 { background-color: var(--brand-600); }
+.hover\:bg-brand-700:hover { background-color: var(--brand-700); }

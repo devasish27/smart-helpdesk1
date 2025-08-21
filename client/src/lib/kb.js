@@ -1,0 +1,26 @@
+import api from './api';
+
+export async function kbSearch({ query = '', status = '', page = 1, limit = 10 }){
+  const { data } = await api.get('/kb', { params: { query, status, page, limit } });
+  return data;
+}
+
+export async function kbCreate(payload){
+  const { data } = await api.post('/kb', payload);
+  return data;
+}
+
+export async function kbUpdate(id, payload){
+  const { data } = await api.put(`/kb/${id}`, payload);
+  return data;
+}
+
+export async function kbDelete(id){
+  const { data } = await api.delete(`/kb/${id}`);
+  return data;
+}
+
+export async function kbPublish(id, status){
+  const { data } = await api.put(`/kb/${id}/publish`, { status });
+  return data;
+}
