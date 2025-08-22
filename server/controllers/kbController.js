@@ -64,6 +64,7 @@ export const deleteArticle = async (req, res) => {
 
     res.json({ success: true });
   } catch (err) {
+    console.error("Delete failed", err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -72,12 +73,34 @@ export const deleteArticle = async (req, res) => {
 export const getArticleById = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
-    if (!article) {
-      return res.status(404).json({ error: "Article not found" });
-    }
+    if (!article) return res.status(404).json({ error: "Article not found" });
+
     res.json(article);
   } catch (err) {
     console.error("Get article failed", err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// PATCH /api/kb/:id/status
+export const setPublishStatus = async (req, res) => {
+  try {
+    const { status } = req.body; // "published" or "draft"
+    const article = await Article.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    if (!article) return res.status(404).json({ error: "Article not found" });
+
+    await logAction(req.user.id, "kb:status:update", {
+      articleId: article._id,
+      status,
+    });
+
+    res.json(article);
+  } catch (err) {
+    console.error("Set publish status failed", err);
     res.status(400).json({ error: err.message });
   }
 };

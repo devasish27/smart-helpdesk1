@@ -1,12 +1,7 @@
 import Ticket from "../models/Ticket.js";
 import Article from "../models/Article.js";
 import AuditLog from "../models/AuditLog.js";
-import { logAction } from "../utils/auditHelper.js";
-
-// Helper to log actions
-async function logAction(userId, action, target, details = {}) {
-  await AuditLog.create({ performedBy: userId, action, target, details });
-}
+import { logAction } from "../utils/auditHelper.js"; // only import, no duplicate function
 
 // --- GET all tickets (admin/agent) or user’s tickets ---
 export const getTickets = async (req, res) => {
@@ -28,6 +23,7 @@ export const getTicketById = async (req, res) => {
   res.json(ticket);
 };
 
+// --- CREATE ticket ---
 export const createTicket = async (req, res) => {
   try {
     const ticket = new Ticket({ ...req.body, createdBy: req.user.id });
@@ -41,7 +37,7 @@ export const createTicket = async (req, res) => {
   }
 };
 
-// UPDATE
+// --- UPDATE ticket ---
 export const updateTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -58,7 +54,7 @@ export const updateTicket = async (req, res) => {
   }
 };
 
-// DELETE
+// --- DELETE ticket ---
 export const deleteTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findByIdAndDelete(req.params.id);
@@ -72,7 +68,7 @@ export const deleteTicket = async (req, res) => {
   }
 };
 
-// TRIAGE
+// --- TRIAGE ticket ---
 export const triageTicket = async (req, res) => {
   try {
     // your AI/stub triage logic here ...

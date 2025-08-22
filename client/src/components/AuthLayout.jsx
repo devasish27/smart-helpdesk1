@@ -8,7 +8,7 @@ export default function AuthLayout({ title, subtitle, children }) {
         <div className="hidden lg:block">
           <div className="card p-8">
             <h1 className="text-3xl font-semibold tracking-tight">Smart Helpdesk</h1>
-            <p className="mt-3 text-slate-600">Agentic triage with clean UX.</p>
+            <p className="mt-3 text-slate-600">Agentic triage.</p>
           </div>
         </div>
         
