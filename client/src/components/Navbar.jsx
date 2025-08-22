@@ -1,14 +1,17 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import Notifications from "./Notifications";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const [notifOpen, setNotifOpen] = useState(false); // control dropdown
+
+  const handleNotifToggle = () => setNotifOpen(!notifOpen);
 
   return (
     <nav className="bg-slate-800 text-white p-3 flex justify-between items-center">
       {/* Left side: app name / links */}
-
       <div className="flex space-x-4">
         {user ? (
           <>
@@ -31,9 +34,24 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Right side: logout button */}
-      <div>
-        {user && <Notifications />}
+      {/* Right side: notifications and logout */}
+      <div className="relative flex items-center space-x-3">
+        {user && (
+          <>
+            <button
+              onClick={handleNotifToggle}
+              className="relative bg-slate-700 p-2 rounded hover:bg-slate-600"
+            >
+              Notifications
+            </button>
+            {notifOpen && (
+              <Notifications
+                onClose={() => setNotifOpen(false)} // close dropdown when all read
+              />
+            )}
+          </>
+        )}
+
         {user && (
           <button
             onClick={logout}

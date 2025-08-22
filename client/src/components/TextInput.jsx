@@ -1,17 +1,21 @@
-import PropTypes from "prop-types";
+// client/src/components/TextInput.jsx
+import PropTypes from 'prop-types';
 
-export default function TextInput({ label, error, ...props }) {
+export default function TextInput({ label, error, id, name, ...props }) {
+  const inputId = id || name; // fallback to name if id not provided
   return (
     <div>
-      {label && <label className="label">{label}</label>}
-      <input className="input mt-1" {...props} />
-      {error && <p className="error">{error}</p>}
+      <label htmlFor={inputId} className="label">{label}</label>
+      <input id={inputId} name={name} {...props} className="input mt-1" />
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 }
 
+// PropTypes validation
 TextInput.propTypes = {
-  label: PropTypes.string,
+  label: PropTypes.string.isRequired,
   error: PropTypes.string,
-  // allow any other props (like type, placeholder, etc.)
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
 };
