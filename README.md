@@ -133,6 +133,7 @@ npm test
 
 Note: Some tests require <Router> wrapping due to useNavigate hooks.
 
+
 ## Notes
 
 * Run in `STUB_MODE=true` for offline/testing without external AI keys.
@@ -147,3 +148,10 @@ Note: Some tests require <Router> wrapping due to useNavigate hooks.
 ## License
 
 MIT
+
+## Public URL
+Backend : https://smart-helpdesk1.onrender.com
+Frontend: https://samrt-helpdesk1.vercel.app
+
+## video
+(https://drive.google.com/file/d/1QCi2jNFwakw6nKXgv77XVuSPFxj8-hY3/view?usp=drive_link)
