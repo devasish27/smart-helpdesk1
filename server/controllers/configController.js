@@ -1,4 +1,4 @@
-import Config from "../models/Config";
+import Config from "../models/Config.js";
 
 export const getConfig = async (req, res) => {
   let config = await Config.findOne();
