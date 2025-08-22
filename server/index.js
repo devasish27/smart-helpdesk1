@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+
 import authRoutes from "./routes/authRoutes.js";
 import { authMiddleware, requireRole } from "./middleware/auth.js";
 import kbRoutes from './routes/kbRoutes.js';
@@ -29,6 +30,7 @@ app.use(morgan("dev"));
 
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/audit", auditRoutes);
+app.use("/api/kb", kbRoutes);
 app.use("/api/triage", triageRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notifications", notificationRoutes);
@@ -55,9 +57,6 @@ app.get(
 );
 
 app.get('/health', (req, res) => res.status(200).send('OK'));
-
-
-app.use('/api/kb', kbRoutes);
 
 
 

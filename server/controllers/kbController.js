@@ -1,4 +1,5 @@
 import Article from "../models/Article.js";
+import { logAction } from "../utils/auditHelper.js";
 
 // GET /api/kb?query=...
 export const searchKB = async (req, res) => {
@@ -27,9 +28,11 @@ export const createArticle = async (req, res) => {
   try {
     const article = new Article(req.body);
     await article.save();
+
+    await logAction(req.user.id, "kb:create", { articleId: article._id });
+
     res.status(201).json(article);
   } catch (err) {
-    console.error("Create failed", err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -37,13 +40,16 @@ export const createArticle = async (req, res) => {
 // PUT /api/kb/:id
 export const updateArticle = async (req, res) => {
   try {
-    const article = await Article.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const article = await Article.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!article) return res.status(404).json({ error: "Article not found" });
+
+    await logAction(req.user.id, "kb:update", {
+      articleId: article._id,
+      changes: req.body,
+    });
+
     res.json(article);
   } catch (err) {
-    console.error("Update failed", err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -53,9 +59,11 @@ export const deleteArticle = async (req, res) => {
   try {
     const article = await Article.findByIdAndDelete(req.params.id);
     if (!article) return res.status(404).json({ error: "Article not found" });
+
+    await logAction(req.user.id, "kb:delete", { articleId: req.params.id });
+
     res.json({ success: true });
   } catch (err) {
-    console.error("Delete failed", err);
     res.status(400).json({ error: err.message });
   }
 };

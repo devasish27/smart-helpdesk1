@@ -1,6 +1,7 @@
 import Ticket from "../models/Ticket.js";
 import Article from "../models/Article.js";
 import AuditLog from "../models/AuditLog.js";
+import { logAction } from "../utils/auditHelper.js";
 
 // Helper to log actions
 async function logAction(userId, action, target, details = {}) {
@@ -27,22 +28,12 @@ export const getTicketById = async (req, res) => {
   res.json(ticket);
 };
 
-// --- CREATE ---
 export const createTicket = async (req, res) => {
   try {
-    const ticket = await Ticket.create({ ...req.body, createdBy: req.user._id });
-
-    // Suggest KB articles based on description keywords
-    const suggestions = await Article.find({
-      $text: { $search: ticket.description },
-    }).limit(3);
-
-    ticket.kbSuggestions = suggestions.map((a) => a._id);
+    const ticket = new Ticket({ ...req.body, createdBy: req.user.id });
     await ticket.save();
 
-    await logAction(req.user._id, "CREATED_TICKET", `Ticket:${ticket._id}`, {
-      title: ticket.title,
-    });
+    await logAction(req.user.id, "ticket:create", { ticketId: ticket._id });
 
     res.status(201).json(ticket);
   } catch (err) {
@@ -50,28 +41,16 @@ export const createTicket = async (req, res) => {
   }
 };
 
-// --- UPDATE (assign, change status, edit) ---
+// UPDATE
 export const updateTicket = async (req, res) => {
   try {
-    const ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
 
-    await logAction(
-      req.user._id,
-      "UPDATED_TICKET",
-      `Ticket:${ticket._id}`,
-      req.body
-    );
-
-    // 🔔 Notify user when status changes
-    if (req.body.status) {
-      // you can implement notifyUser via WebSocket or email stub
-      console.log(
-        `Notify: Ticket "${ticket.title}" status changed to ${ticket.status}`
-      );
-    }
+    await logAction(req.user.id, "ticket:update", {
+      ticketId: ticket._id,
+      changes: req.body,
+    });
 
     res.json(ticket);
   } catch (err) {
@@ -79,16 +58,33 @@ export const updateTicket = async (req, res) => {
   }
 };
 
-// --- DELETE (admins only) ---
+// DELETE
 export const deleteTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findByIdAndDelete(req.params.id);
     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
 
-    await logAction(req.user._id, "DELETED_TICKET", `Ticket:${ticket._id}`);
+    await logAction(req.user.id, "ticket:delete", { ticketId: req.params.id });
 
     res.json({ success: true });
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+};
+
+// TRIAGE
+export const triageTicket = async (req, res) => {
+  try {
+    // your AI/stub triage logic here ...
+    const result = { category: "tech", confidence: 0.92 };
+
+    await logAction(req.user.id, "ticket:triage", {
+      ticketId: req.params.id,
+      result,
+    });
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

@@ -32,12 +32,16 @@ smart-helpdesk/
 └── docker-compose.yml
 ```
 
+## Architecture Diagram
+
+
+
 ## Environment Variables
 
 ### Backend (.env)
 
 ```
-PORT=8000
+PORT=8080
 MONGO_URI=mongodb+srv://devasishsai:8KubVxvMKRvWGiGj@cluster0.n2go2nc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 STUB_MODE=true
 JWT_SECRET=change-me
