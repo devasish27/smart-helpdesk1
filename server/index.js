@@ -56,7 +56,7 @@ app.get(
 
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-const kbRoutes = require('./routes/kbRoutes.js');
+
 app.use('/api/kb', kbRoutes);
 
 
