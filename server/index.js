@@ -16,6 +16,7 @@ import configRoutes from "./routes/configRoutes.js";
 
 dotenv.config();
 
+
 const app = express();
 
 // CORS setup (only allow frontend origin)
@@ -53,11 +54,11 @@ app.get(
   }
 );
 
-app.get("/health", (req, res) => {
-  res.json({ ok: true });
-});
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
+const kbRoutes = require('./routes/kbRoutes.js');
 app.use('/api/kb', kbRoutes);
+
 
 
 const PORT = process.env.PORT || 8080;

@@ -10,6 +10,8 @@ router.post("/", authMiddleware, requireRole(["admin"]), createArticle);
 router.put("/:id", authMiddleware, requireRole(["admin"]), updateArticle);
 router.delete("/:id", authMiddleware, requireRole(["admin"]), deleteArticle);
 router.get("/:id", authMiddleware, getArticleById);
-
+router.get("/debug", authMiddleware, (req, res) => {
+  res.json({ user: req.user });
+});
 
 export default router;

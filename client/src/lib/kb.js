@@ -1,5 +1,11 @@
 import api from './api';
 
+export async function login(email, password) {
+  const { data } = await api.post('/auth/login', { email, password });
+  localStorage.setItem('token', data.token); // <-- must exist
+  return data.user;
+}
+
 export async function kbSearch({ query = '', status = '', page = 1, limit = 10 }){
   const { data } = await api.get('/kb', { params: { query, status, page, limit } });
   return data;
